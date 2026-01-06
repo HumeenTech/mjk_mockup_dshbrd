@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBAC Management | CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <style>
+        /* Enhanced CSS for better consistency */
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --surface-card: #ffffff;
+            --surface-border: #e5e7eb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --radius-default: 0.5rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Unified card style */
+        .card {
+            background: var(--surface-card);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-default);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Unified button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            border-radius: var(--radius-default);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: var(--text-primary);
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        /* Enhanced tab styling */
+        .rbac-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--surface-border);
+            overflow-x: auto;
+            padding-bottom: 1px;
+            scrollbar-width: none;
+        }
+
+        .rbac-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .rbac-tab {
+            padding: 0.75rem 0;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .rbac-tab:hover {
+            color: var(--text-primary);
+        }
+
+        .rbac-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Enhanced table styling */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-default);
+        }
+
+        .table {
+            width: 100%;
+            min-width: 800px;
+        }
+
+        .table th {
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: left;
+            background: #f9fafb;
+            border-bottom: 1px solid var(--surface-border);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--surface-border);
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-banned {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Role cards */
+        .role-card {
+            background: var(--surface-card);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-default);
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-color);
+        }
+
+        .role-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-default);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Form controls */
+        .form-control {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: var(--radius-default);
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .action-btn {
+            padding: 0.375rem;
+            border-radius: var(--radius-default);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .action-btn.edit {
+            color: #3b82f6;
+        }
+
+        .action-btn.delete {
+            color: #ef4444;
+        }
+
+        .action-btn.view {
+            color: #6b7280;
+        }
+
+        /* Empty states */
+        .empty-state {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Page transitions */
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .table th, .table td {
+                padding: 0.75rem 1rem;
+            }
+            
+            .role-card {
+                padding: 1rem;
+            }
+            
+            .card-header {
+                padding: 1rem;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Dashboard Layout -->
+    <div id="dashboardLayout">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-4 md:p-6 lg:p-8">
+                <!-- Page Header - Enhanced -->
+                <div class="mb-8">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="p-2 bg-indigo-50 rounded-lg">
+                                    <i class="fas fa-shield-alt text-indigo-600 text-lg"></i>
+                                </div>
+                                <h1 class="text-2xl font-bold text-gray-900">Access Control</h1>
+                            </div>
+                            <p class="text-gray-600">Manage user permissions, roles, and security settings</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button id="addUserBtn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                <span>Add User</span>
+                            </button>
+                            <button id="exportBtn" class="btn btn-secondary">
+                                <i class="fas fa-download"></i>
+                                <span>Export</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Overview - New Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="card">
+                        <div class="p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Total Users</p>
+                                    <p class="text-2xl font-bold text-gray-900">42</p>
+                                </div>
+                                <div class="p-3 bg-blue-50 rounded-lg">
+                                    <i class="fas fa-users text-blue-600"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Active Roles</p>
+                                    <p class="text-2xl font-bold text-gray-900">6</p>
+                                </div>
+                                <div class="p-3 bg-green-50 rounded-lg">
+                                    <i class="fas fa-user-tag text-green-600"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Blacklisted</p>
+                                    <p class="text-2xl font-bold text-gray-900">3</p>
+                                </div>
+                                <div class="p-3 bg-red-50 rounded-lg">
+                                    <i class="fas fa-ban text-red-600"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Pending Reports</p>
+                                    <p class="text-2xl font-bold text-gray-900">5</p>
+                                </div>
+                                <div class="p-3 bg-yellow-50 rounded-lg">
+                                    <i class="fas fa-flag text-yellow-600"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs - Enhanced -->
+                <div class="mb-8">
+                    <div class="rbac-tabs">
+                        <button data-tab="users" class="rbac-tab active">
+                            <i class="fas fa-users text-sm"></i>
+                            <span>Users</span>
+                            <span class="ml-1 px-2 py-0.5 bg-indigo-100 text-indigo-600 text-xs rounded-full">42</span>
+                        </button>
+                        <button data-tab="roles" class="rbac-tab">
+                            <i class="fas fa-user-tag text-sm"></i>
+                            <span>Roles</span>
+                        </button>
+                        <button data-tab="permissions" class="rbac-tab">
+                            <i class="fas fa-key text-sm"></i>
+                            <span>Permissions</span>
+                        </button>
+                        <button data-tab="blacklist" class="rbac-tab">
+                            <i class="fas fa-ban text-sm"></i>
+                            <span>Blacklist</span>
+                            <span class="ml-1 px-2 py-0.5 bg-red-100 text-red-600 text-xs rounded-full">3</span>
+                        </button>
+                        <button data-tab="reports" class="rbac-tab">
+                            <i class="fas fa-flag text-sm"></i>
+                            <span>Reports</span>
+                            <span class="ml-1 px-2 py-0.5 bg-yellow-100 text-yellow-600 text-xs rounded-full">5</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Users Tab - Enhanced -->
+                <div id="usersTab" class="rbac-tab-content active fade-in">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">User Management</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Manage all system users and their permissions</p>
+                                </div>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <div class="relative">
+                                        <input type="text" id="searchUsers" placeholder="Search users..."
+                                            class="form-control pl-10">
+                                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                    </div>
+                                    <select id="filterRole" class="form-control">
+                                        <option value="All Roles">All Roles</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Editor">Editor</option>
+                                        <option value="Viewer">Viewer</option>
+                                        <option value="Contributor">Contributor</option>
+                                    </select>
+                                    <select id="filterStatus" class="form-control">
+                                        <option value="All Status">All Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Pending">Pending</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="w-10">
+                                            <input type="checkbox" class="rounded border-gray-300">
+                                        </th>
+                                        <th>User</th>
+                                        <th class="hidden lg:table-cell">Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTable">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Enhanced Empty State -->
+                        <div id="usersEmptyState" class="hidden empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-user-slash"></i>
+                            </div>
+                            <h4 class="empty-state-title">No users found</h4>
+                            <p class="mb-4">No users match your search criteria</p>
+                            <button id="clearFiltersBtn" class="btn btn-outline">
+                                Clear Filters
+                            </button>
+                        </div>
+
+                        <!-- Table Footer -->
+                        <div class="p-4 border-t border-gray-200">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div class="text-sm text-gray-600">
+                                    Showing <span class="font-medium">1-10</span> of <span class="font-medium">42</span> users
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button class="action-btn">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span class="text-sm font-medium">Page 1 of 5</span>
+                                    <button class="action-btn">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roles Tab - Enhanced -->
+                <div id="rolesTab" class="rbac-tab-content fade-in">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Roles & Permissions</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Manage role-based access levels</p>
+                                </div>
+                                <button id="addRoleBtn" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    <span>Add Role</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-6" id="rolesGrid">
+                            <!-- Role cards will be generated by JS -->
+                        </div>
+                        
+                        <!-- Empty State -->
+                        <div id="rolesEmptyState" class="hidden empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-user-tag"></i>
+                            </div>
+                            <h4 class="empty-state-title">No roles configured</h4>
+                            <p class="mb-4">Create your first role to get started</p>
+                            <button id="createFirstRoleBtn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Create Role
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Permissions Tab - New Section -->
+                <div id="permissionsTab" class="rbac-tab-content fade-in">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Permission Sets</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Manage granular permissions for roles</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Permissions content would go here -->
+                    </div>
+                </div>
+
+                <!-- Blacklist Tab - Enhanced -->
+                <div id="blacklistTab" class="rbac-tab-content fade-in">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Restricted Access</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Users with platform restrictions</p>
+                                </div>
+                                <div class="flex gap-3">
+                                    <button id="addToBlacklistBtn" class="btn btn-outline">
+                                        <i class="fas fa-user-slash"></i>
+                                        <span>Add Restriction</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Reason</th>
+                                        <th class="hidden lg:table-cell">Date Added</th>
+                                        <th class="hidden md:table-cell">Expires</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blacklistTable">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Empty State -->
+                        <div id="blacklistEmptyState" class="hidden empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                            <h4 class="empty-state-title">No restrictions</h4>
+                            <p>All users have normal access privileges</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Tab - Enhanced -->
+                <div id="reportsTab" class="rbac-tab-content fade-in">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">User Reports</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Review and manage reported users</p>
+                                </div>
+                                <div class="flex gap-3">
+                                    <select id="filterReportStatus" class="form-control">
+                                        <option value="All">All Reports</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Reviewed">Reviewed</option>
+                                        <option value="Resolved">Resolved</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Reported User</th>
+                                        <th class="hidden lg:table-cell">Reported By</th>
+                                        <th>Reason</th>
+                                        <th class="hidden lg:table-cell">Date</th>
+                                        <th>Status</th>
+                                        <th class="text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reportsTable">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Empty State -->
+                        <div id="reportsEmptyState" class="hidden empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <h4 class="empty-state-title">No reports</h4>
+                            <p>No user reports to review at this time</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Common Modals -->
+    <div id="modals-container"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/rbac.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load components
+            loadComponent('components/header.html', 'header-container');
+            loadComponent('components/sidebar.html', 'sidebar-container');
+            loadComponent('components/modals.html', 'modals-container');
+            
+            // Initialize RBAC
+            setTimeout(() => {
+                if (typeof RBACUI !== 'undefined') {
+                    RBACUI.init();
+                }
+            }, 300);
+            
+            // Add tab switching functionality
+            setupTabSwitching();
+        });
+        
+        // Function to load components
+        async function loadComponent(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.getElementById(containerId).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading component:', error);
+            }
+        }
+        
+        // Tab switching functionality
+        function setupTabSwitching() {
+            const tabs = document.querySelectorAll('.rbac-tab');
+            const tabContents = document.querySelectorAll('.rbac-tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show target content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    });
+                    
+                    const targetContent = document.getElementById(`${target}Tab`);
+                    if (targetContent) {
+                        targetContent.style.display = 'block';
+                        targetContent.classList.add('active', 'fade-in');
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

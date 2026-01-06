@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Dashboard Layout -->
+    <div id="dashboardLayout">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <h2 id="pageTitle" class="text-2xl font-bold text-gray-900">Settings</h2>
+                    <p id="pageSubtitle" class="text-gray-600 mt-1">Manage your account and application preferences.</p>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2">
+                        <div class="card p-5 mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">General Settings</h3>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Platform Name</label>
+                                    <input type="text" id="platformName"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                        value="CMS Dashboard">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Timezone</label>
+                                    <select id="timezone"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                        <option>UTC-05:00 Eastern Time</option>
+                                        <option>UTC-08:00 Pacific Time</option>
+                                        <option>UTC+00:00 GMT</option>
+                                        <option>UTC+01:00 Central European Time</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Date Format</label>
+                                    <select id="dateFormat"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                        <option>MM/DD/YYYY</option>
+                                        <option>DD/MM/YYYY</option>
+                                        <option>YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Enable Email Notifications</p>
+                                        <p class="text-sm text-gray-500">Receive email alerts for important activities</p>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="checkbox" id="emailNotifications" class="sr-only" checked>
+                                        <div class="block bg-gray-300 w-12 h-6 rounded-full toggle-bg"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-gray-900">Enable Two-Factor Authentication</p>
+                                        <p class="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="checkbox" id="twoFactorAuth" class="sr-only">
+                                        <div class="block bg-gray-300 w-12 h-6 rounded-full toggle-bg"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <button id="saveSettingsBtn" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="card p-5 mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Your Account</h3>
+
+                            <div class="flex flex-col items-center mb-6">
+                                <div class="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
+                                    <i class="fas fa-user text-gray-600 text-3xl"></i>
+                                </div>
+                                <h4 class="text-lg font-medium text-gray-900" id="profileUsername">Admin</h4>
+                                <p class="text-sm text-gray-500" id="profileRole">Administrator</p>
+                            </div>
+
+                            <div class="space-y-3">
+                                <a href="profile.html" class="flex items-center p-3 text-gray-700 rounded-md hover:bg-gray-100">
+                                    <i class="fas fa-user mr-3 text-gray-500"></i>
+                                    <span>Edit Profile</span>
+                                </a>
+
+                                <a href="#" class="flex items-center p-3 text-gray-700 rounded-md hover:bg-gray-100">
+                                    <i class="fas fa-shield-alt mr-3 text-gray-500"></i>
+                                    <span>Privacy & Security</span>
+                                </a>
+
+                                <a href="#" class="flex items-center p-3 text-gray-700 rounded-md hover:bg-gray-100">
+                                    <i class="fas fa-bell mr-3 text-gray-500"></i>
+                                    <span>Notifications</span>
+                                </a>
+
+                                <a href="#" class="flex items-center p-3 text-gray-700 rounded-md hover:bg-gray-100">
+                                    <i class="fas fa-palette mr-3 text-gray-500"></i>
+                                    <span>Appearance</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Danger Zone</h3>
+                            <div class="space-y-4">
+                                <button id="exportDataBtn" class="btn btn-outline w-full justify-center">
+                                    <i class="fas fa-file-export mr-2"></i> Export Data
+                                </button>
+                                <button id="clearCacheBtn" class="btn btn-outline w-full justify-center">
+                                    <i class="fas fa-trash-alt mr-2"></i> Clear Cache
+                                </button>
+                                <button id="deleteAccountBtn" class="btn btn-danger w-full justify-center">
+                                    <i class="fas fa-skull-crossbones mr-2"></i> Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Common Modals -->
+    <div id="modals-container"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/settings.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load components
+            loadComponent('components/header.html', 'header-container');
+            loadComponent('components/sidebar.html', 'sidebar-container');
+            loadComponent('components/modals.html', 'modals-container');
+            
+            // Initialize settings
+            SettingsUI.init();
+        });
+         
+        // Function to load components
+        async function loadComponent(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.getElementById(containerId).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading component:', error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Management | CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Dashboard Layout -->
+    <div id="dashboardLayout">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+
+                <!-- Comments Management -->
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Comment Management</h2>
+                        <p class="text-gray-600 mt-1">Manage and moderate user comments across your platform.</p>
+                    </div>
+                    <button id="addCommentBtn" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i> Add Comment
+                    </button>
+                </div>
+
+                <div class="card overflow-hidden mb-8">
+                    <div class="p-5 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">All Comments</h3>
+                            <div class="flex items-center space-x-4">
+                                <div class="relative">
+                                    <input type="text" placeholder="Search comments..." id="searchComments"
+                                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                                </div>
+                                <select id="filterStatus" class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                    <option value="">All Status</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="spam">Spam</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-left text-sm text-gray-500 border-b border-gray-200">
+                                    <th class="pb-3 pl-5 font-medium">Comment</th>
+                                    <th class="pb-3 font-medium">User</th>
+                                    <th class="pb-3 font-medium">Content</th>
+                                    <th class="pb-3 font-medium">Date</th>
+                                    <th class="pb-3 font-medium">Status</th>
+                                    <th class="pb-3 pr-5 font-medium text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="commentsTable">
+                                <!-- Filled by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Common Modals -->
+    <div id="modals-container"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/comments.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load components
+            loadComponent('components/header.html', 'header-container');
+            loadComponent('components/sidebar.html', 'sidebar-container');
+            loadComponent('components/modals.html', 'modals-container');
+            
+            // Initialize comments
+            CommentsUI.init();
+        });
+        
+        // Function to load components
+        async function loadComponent(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.getElementById(containerId).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading component:', error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings | CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Dashboard Layout -->
+    <div id="dashboardLayout">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <h2 id="pageTitle" class="text-2xl font-bold text-gray-900">Profile Settings</h2>
+                    <p id="pageSubtitle" class="text-gray-600 mt-1">Manage your personal information and account settings.</p>
+                </div>
+
+                <!-- Profile Content -->
+                <div class="card p-5 max-w-2xl">
+                    <div class="flex items-center mb-8">
+                        <div class="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center mr-6">
+                            <i class="fas fa-user text-gray-600 text-3xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900" id="profileFullName">Admin User</h3>
+                            <p class="text-gray-600" id="profileEmail">admin@example.com</p>
+                            <button id="changeAvatarBtn" class="btn btn-outline mt-2">
+                                <i class="fas fa-camera mr-2"></i> Change Avatar
+                            </button>
+                        </div>
+                    </div>
+
+                    <form id="profileForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                <input type="text" id="firstName"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                    value="Admin">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                <input type="text" id="lastName"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                    value="User">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                            <input type="email" id="email"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                                value="admin@example.com">
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                            <textarea id="bio" rows="3"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">System administrator with full access to all features and settings.</textarea>
+                        </div>
+
+                        <div class="pt-6 border-t border-gray-200">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Change Password</h4>
+
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                                <input type="password" id="currentPassword"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                                    <input type="password" id="newPassword"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                                    <input type="password" id="confirmPassword"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 mt-8">
+                            <button type="button" id="cancelProfileBtn" class="btn btn-outline">Cancel</button>
+                            <button type="submit" id="saveProfileBtn" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Common Modals -->
+    <div id="modals-container"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load components
+            loadComponent('components/header.html', 'header-container');
+            loadComponent('components/sidebar.html', 'sidebar-container');
+            loadComponent('components/modals.html', 'modals-container');
+            
+            // Initialize profile
+            ProfileUI.init();
+        });
+        
+        // Function to load components
+        async function loadComponent(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.getElementById(containerId).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading component:', error);
+            }
+        }
+    </script>
+</body>
+</html>

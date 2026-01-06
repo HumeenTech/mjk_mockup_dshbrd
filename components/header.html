@@ -1,0 +1,46 @@
+<!-- Top Navigation -->
+<header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <img src="assets/img/mjklogo.jpg" alt="logo" style="width: 45px; height: auto; margin-right: 25px;">
+                <h1 class="text-xl font-bold text-gray-900">Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button id="notificationBtn" class="p-2 rounded-full text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-bell"></i>
+                        <span id="notificationBadge"
+                            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">3</span>
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <button id="userMenuBtn" class="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-100">
+                        <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+                            <i class="fas fa-user text-gray-600"></i>
+                        </div>
+                        <span id="currentUsername" class="font-medium text-gray-700">Admin</span>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                    </button>
+
+                    <div id="userMenu"
+                        class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-10 hidden">
+                        <a href="profile.html" id="profileLink"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-user mr-2"></i> Profile
+                        </a>
+                        <a href="settings.html" id="settingsLink"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-cog mr-2"></i> Settings
+                        </a>
+                        <hr class="my-1 border-gray-200">
+                        <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

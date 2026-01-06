@@ -1,0 +1,158 @@
+<!-- Add/Edit User Modal -->
+<div id="userModal" class="modal-overlay">
+    <div class="modal">
+        <div class="p-5 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900" id="modalTitle">Add New User</h3>
+        </div>
+
+        <div class="p-5">
+            <form id="userForm">
+                <input type="hidden" id="userId">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input type="text" id="userFullName"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <input type="email" id="userEmail"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                    <input type="text" id="userUsername"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        required>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                        <select id="userRole"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                            <option value="admin">Administrator</option>
+                            <option value="editor">Editor</option>
+                            <option value="viewer">Viewer</option>
+                            <option value="contributor">Contributor</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select id="userStatus"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="banned">Banned</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancelUserBtn" class="btn btn-outline">Cancel</button>
+                    <button type="submit" id="saveUserBtn" class="btn btn-primary">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Comment Modal -->
+<div id="commentModal" class="modal-overlay">
+    <div class="modal">
+        <div class="p-5 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Add New Comment</h3>
+        </div>
+
+        <div class="p-5">
+            <form id="commentForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">User</label>
+                    <select id="commentUser"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                        <!-- Options will be filled by JS -->
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                    <select id="commentContent"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                        <option value="1">Getting Started with RBAC</option>
+                        <option value="2">Advanced Dashboard Techniques</option>
+                        <option value="3">Content Management Best Practices</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Comment Text</label>
+                    <textarea id="commentText" rows="4"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        placeholder="Enter comment text..."></textarea>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select id="commentStatus"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                        <option value="spam">Spam</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancelCommentBtn" class="btn btn-outline">Cancel</button>
+                    <button type="submit" id="saveCommentBtn" class="btn btn-primary">Save Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add modal event listeners after modals are loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // User modal
+        const cancelUserBtn = document.getElementById('cancelUserBtn');
+        if (cancelUserBtn) {
+            cancelUserBtn.addEventListener('click', () => {
+                const userModal = document.getElementById('userModal');
+                if (userModal) userModal.classList.remove('active');
+            });
+        }
+        
+        const userForm = document.getElementById('userForm');
+        if (userForm) {
+            userForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (typeof RBACUI !== 'undefined' && RBACUI.saveUser) {
+                    RBACUI.saveUser();
+                }
+            });
+        }
+        
+        // Comment modal
+        const cancelCommentBtn = document.getElementById('cancelCommentBtn');
+        if (cancelCommentBtn) {
+            cancelCommentBtn.addEventListener('click', () => {
+                const commentModal = document.getElementById('commentModal');
+                if (commentModal) commentModal.classList.remove('active');
+            });
+        }
+        
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    });
+</script>

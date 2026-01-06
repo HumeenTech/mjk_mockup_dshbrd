@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard | CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Dashboard Layout -->
+    <div id="dashboardLayout">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-4 md:p-6">
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">Analytics Dashboard</h2>
+                            <p class="text-gray-600 mt-1">Track and analyze user engagement, content performance, and platform growth</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <select id="timeRange" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent">
+                                <option value="7d">Last 7 days</option>
+                                <option value="30d" selected>Last 30 days</option>
+                                <option value="90d">Last 90 days</option>
+                                <option value="1y">Last year</option>
+                            </select>
+                            <button id="exportAnalyticsBtn" class="btn btn-outline text-sm">
+                                <i class="fas fa-download mr-2"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+                    <!-- Total Users -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500">Total Users</p>
+                                <h3 class="text-2xl font-bold mt-1" id="totalUsers">0</h3>
+                                <div class="mt-2 text-sm">
+                                    <span class="text-green-600 font-medium">
+                                        <i class="fas fa-arrow-up mr-1"></i> 12.5%
+                                    </span>
+                                    <span class="text-gray-500"> from last month</span>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-blue-50 rounded-lg">
+                                <i class="fas fa-users text-blue-600"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>Active: <span id="activeUsers" class="font-medium text-gray-900">0</span></span>
+                                <span>New: <span id="newUsers" class="font-medium text-gray-900">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Views -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500">Content Views</p>
+                                <h3 class="text-2xl font-bold mt-1" id="totalViews">0</h3>
+                                <div class="mt-2 text-sm">
+                                    <span class="text-green-600 font-medium">
+                                        <i class="fas fa-arrow-up mr-1"></i> 24.3%
+                                    </span>
+                                    <span class="text-gray-500"> from last month</span>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-purple-50 rounded-lg">
+                                <i class="fas fa-eye text-purple-600"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>Avg/Content: <span id="avgViews" class="font-medium text-gray-900">0</span></span>
+                                <span>Top: <span id="topViews" class="font-medium text-gray-900">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Likes -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500">Likes</p>
+                                <h3 class="text-2xl font-bold mt-1" id="totalLikes">0</h3>
+                                <div class="mt-2 text-sm">
+                                    <span class="text-green-600 font-medium">
+                                        <i class="fas fa-arrow-up mr-1"></i> 8.7%
+                                    </span>
+                                    <span class="text-gray-500"> from last month</span>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-pink-50 rounded-lg">
+                                <i class="fas fa-thumbs-up text-pink-600"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>Engagement: <span id="engagementRate" class="font-medium text-gray-900">0%</span></span>
+                                <span>Avg/User: <span id="avgLikes" class="font-medium text-gray-900">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500">Comments</p>
+                                <h3 class="text-2xl font-bold mt-1" id="totalComments">0</h3>
+                                <div class="mt-2 text-sm">
+                                    <span class="text-green-600 font-medium">
+                                        <i class="fas fa-arrow-up mr-1"></i> 15.2%
+                                    </span>
+                                    <span class="text-gray-500"> from last month</span>
+                                </div>
+                            </div>
+                            <div class="p-3 bg-green-50 rounded-lg">
+                                <i class="fas fa-comments text-green-600"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="flex justify-between text-xs text-gray-500">
+                                <span>Approved: <span id="approvedComments" class="font-medium text-gray-900">0</span></span>
+                                <span>Pending: <span id="pendingComments" class="font-medium text-gray-900">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- User Growth Chart -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">User Growth</h3>
+                                <p class="text-gray-600 text-sm">New user registrations over time</p>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="user-growth-filter px-3 py-1 text-xs rounded-md border border-gray-300 bg-white" data-period="7d">7D</button>
+                                <button class="user-growth-filter px-3 py-1 text-xs rounded-md border border-gray-300 bg-gray-100" data-period="30d">30D</button>
+                                <button class="user-growth-filter px-3 py-1 text-xs rounded-md border border-gray-300 bg-white" data-period="90d">90D</button>
+                            </div>
+                        </div>
+                        <div class="h-64 md:h-72">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Content Performance Chart -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">Content Performance</h3>
+                                <p class="text-gray-600 text-sm">Views, likes, and comments distribution</p>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <span class="inline-flex items-center mr-3">
+                                    <span class="w-3 h-3 bg-blue-500 rounded-full mr-1"></span> Views
+                                </span>
+                                <span class="inline-flex items-center mr-3">
+                                    <span class="w-3 h-3 bg-pink-500 rounded-full mr-1"></span> Likes
+                                </span>
+                                <span class="inline-flex items-center">
+                                    <span class="w-3 h-3 bg-green-500 rounded-full mr-1"></span> Comments
+                                </span>
+                            </div>
+                        </div>
+                        <div class="h-64 md:h-72">
+                            <canvas id="contentPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engagement Metrics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Engagement Rate Chart -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">Engagement Rate</h3>
+                                <p class="text-gray-600 text-sm">User interaction with content</p>
+                            </div>
+                            <div class="text-sm">
+                                <span class="text-green-600 font-medium">
+                                    <i class="fas fa-arrow-up mr-1"></i> 5.2%
+                                </span>
+                                <span class="text-gray-500"> improvement</span>
+                            </div>
+                        </div>
+                        <div class="h-56 md:h-64">
+                            <canvas id="engagementChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Top Content -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">Top Performing Content</h3>
+                                <p class="text-gray-600 text-sm">Most viewed articles this month</p>
+                            </div>
+                            <a href="#" class="text-sm font-medium text-black hover:underline">View All</a>
+                        </div>
+                        <div class="space-y-4" id="topContentList">
+                            <!-- Top content items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Activity & Demographics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- User Activity Timeline -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">Recent User Activity</h3>
+                                <p class="text-gray-600 text-sm">Latest user actions on the platform</p>
+                            </div>
+                            <button id="refreshActivity" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <div class="space-y-4 max-h-80 overflow-y-auto pr-2" id="userActivityList">
+                            <!-- User activity items will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- User Demographics -->
+                    <div class="card p-4 md:p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">User Demographics</h3>
+                                <p class="text-gray-600 text-sm">User distribution by role</p>
+                            </div>
+                        </div>
+                        <div class="h-56 md:h-64">
+                            <canvas id="demographicsChart"></canvas>
+                        </div>
+                        <div class="mt-4 grid grid-cols-2 gap-3 text-sm" id="demographicsLegend">
+                            <!-- Legend will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Common Modals -->
+    <div id="modals-container"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/content.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load components
+            loadComponent('components/header.html', 'header-container');
+            loadComponent('components/sidebar.html', 'sidebar-container');
+            loadComponent('components/modals.html', 'modals-container');
+            
+            // Initialize content analytics
+            setTimeout(() => {
+                if (typeof ContentAnalytics !== 'undefined') {
+                    ContentAnalytics.init();
+                }
+            }, 300);
+        });
+        
+        // Function to load components
+        async function loadComponent(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.getElementById(containerId).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading component:', error);
+            }
+        }
+    </script>
+</body>
+</html>

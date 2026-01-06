@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Dashboard Layout -->
+    <div id="dashboardLayout">
+        <!-- Header -->
+        <div id="header-container"></div>
+
+        <div class="flex">
+            <!-- Sidebar -->
+            <div id="sidebar-container"></div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Page Header -->
+                <div class="mb-6">
+                    <h2 id="pageTitle" class="text-2xl font-bold text-gray-900">Dashboard Overview</h2>
+                    <p id="pageSubtitle" class="text-gray-600 mt-1">Welcome back! Here's what's happening with your platform today.</p>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div id="dashboardPage" class="page active">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="card p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500">Total Users</p>
+                                    <h3 class="text-2xl font-bold mt-1" id="totalUsers">0</h3>
+                                </div>
+                                <div class="p-3 bg-gray-100 rounded-lg">
+                                    <i class="fas fa-users text-gray-700"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600">
+                                <span class="text-green-600 font-medium">
+                                    <i class="fas fa-arrow-up mr-1"></i> 12%
+                                </span>
+                                <span> from last month</span>
+                            </div>
+                        </div>
+
+                        <div class="card p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500">Subscribers</p>
+                                    <h3 class="text-2xl font-bold mt-1" id="totalSubscribers">0</h3>
+                                </div>
+                                <div class="p-3 bg-gray-100 rounded-lg">
+                                    <i class="fas fa-user-check text-gray-700"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600">
+                                <span class="text-green-600 font-medium">
+                                    <i class="fas fa-arrow-up mr-1"></i> 8%
+                                </span>
+                                <span> from last month</span>
+                            </div>
+                        </div>
+
+                        <div class="card p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500">Contributors</p>
+                                    <h3 class="text-2xl font-bold mt-1" id="totalContributors">0</h3>
+                                </div>
+                                <div class="p-3 bg-gray-100 rounded-lg">
+                                    <i class="fas fa-pen-nib text-gray-700"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600">
+                                <span class="text-red-600 font-medium">
+                                    <i class="fas fa-arrow-down mr-1"></i> 2%
+                                </span>
+                                <span> from last month</span>
+                            </div>
+                        </div>
+
+                        <div class="card p-5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm text-gray-500">Active Roles</p>
+                                    <h3 class="text-2xl font-bold mt-1" id="totalRoles">0</h3>
+                                </div>
+                                <div class="p-3 bg-gray-100 rounded-lg">
+                                    <i class="fas fa-user-tag text-gray-700"></i>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600">
+                                <span class="text-green-600 font-medium">
+                                    <i class="fas fa-arrow-up mr-1"></i> 5%
+                                </span>
+                                <span> from last month</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts and Table -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">User Growth</h3>
+                            <div class="h-64 flex items-center justify-center border border-gray-200 rounded-md">
+                                <p class="text-gray-500">User growth chart visualization would appear here</p>
+                            </div>
+                        </div>
+
+                        <div class="card p-5">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Role Distribution</h3>
+                            <div class="h-64 flex items-center justify-center border border-gray-200 rounded-md">
+                                <p class="text-gray-500">Role distribution chart visualization would appear here</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Users Table -->
+                    <div class="card p-5">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Recent Users</h3>
+                            <a href="rbac.html" class="text-sm font-medium text-black hover:underline">View All</a>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-sm text-gray-500 border-b border-gray-200">
+                                        <th class="pb-3 font-medium">User</th>
+                                        <th class="pb-3 font-medium">Role</th>
+                                        <th class="pb-3 font-medium">Status</th>
+                                        <th class="pb-3 font-medium">Joined</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentUsersTable">
+                                    <!-- Filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Common Modals -->
+    <div id="modals-container"></div>
+
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load components
+            loadComponent('components/header.html', 'header-container');
+            loadComponent('components/sidebar.html', 'sidebar-container');
+            loadComponent('components/modals.html', 'modals-container');
+            
+            // Initialize dashboard
+            DashboardUI.init();
+        });
+        
+        // Function to load components
+        async function loadComponent(url, containerId) {
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                document.getElementById(containerId).innerHTML = html;
+            } catch (error) {
+                console.error('Error loading component:', error);
+            }
+        }
+    </script>
+</body>
+</html>
